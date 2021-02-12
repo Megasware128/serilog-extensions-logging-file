@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace WebApplication
@@ -17,14 +18,14 @@ namespace WebApplication
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IHost BuildWebHost(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureLogging((hostingContext, builder) =>
                 {
                     var configuration = hostingContext.Configuration.GetSection("Logging");
                     builder.AddFile(configuration);
                 })
-                .UseStartup<Startup>()
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
                 .Build();
     }
 }
